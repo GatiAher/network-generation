@@ -1,11 +1,14 @@
 import networkx as nx
 import matplotlib.pyplot as plt
-import math
+import math, random
+
+# def rewire(graph, prob, )
+
 
 # parameters
-N = 15
-K = 8
-P = 0.2
+N = 8
+K = 4
+P = 0.8
 
 halfK = math.floor(K/2)
 nodes = range(1,N+1)
@@ -19,8 +22,20 @@ for i, u in enumerate(ring_lattice.nodes):
         v = (j % N) + 1
         ring_lattice.add_edge(u, v)
 
-nx.draw_circular(ring_lattice)
-plt.show()
 
 # randomize ring lattice to create Watts-Strogatz
 ws = nx.Graph(ring_lattice)
+
+for u in ws:
+    trash_edges = []
+    new_edges = []
+    non_neighbors = [n for n in nx.non_neighbors(ws, u)]
+    for v in ws[u]:
+        if random.random() <= P:
+            trash_edges.append((u,v))
+            new_edges.append((u, random.choice(non_neighbors)))
+    ws.remove_edges_from(trash_edges)
+    ws.add_edges_from(new_edges)
+
+nx.draw_circular(ws)
+plt.show()
