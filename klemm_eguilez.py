@@ -48,20 +48,14 @@ def klemm_eguilez(N=50, M=5, P_MU=0.01, draw_flag=False):
     # initialize fully connected initial network of size M
     # add its nodes to active nodes
     G = nx.complete_graph(M)
-
     active_nodes = list(G.nodes)
-    print("active_nodes:", active_nodes)
 
     # iteratively add remaining N-M nodes with edges to M existing nodes
     for i in range(M, N):
         # calculate deactivated nodes
         deactivated_nodes = list(set(list(G.nodes)) ^ set(active_nodes))
-        
-        print("active_nodes:", active_nodes)
-        print("deactivated_nodes:", deactivated_nodes)
-
+        # add node
         G.add_node(i)
-        print("*add node ", i)
 
         for j in active_nodes:
             chance = random.random()        
@@ -94,7 +88,6 @@ def klemm_eguilez(N=50, M=5, P_MU=0.01, draw_flag=False):
                 chosen = True
                 active_nodes.remove(j)
                 active_nodes.append(i)
-                print("*deactivate node", j)
 
     if (draw_flag):
         pos = nx.spring_layout(G, seed=3113794652)  # positions for all nodes
