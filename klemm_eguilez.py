@@ -10,8 +10,11 @@ Link: https://www.frontiersin.org/articles/10.3389/fncom.2011.00011/full
 
 import networkx as nx
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 import math
 import random
+
+frameData = [] # data for each frame, will be put into nx.draw()
 
 def klemm_eguilez(N=50, M=5, P_MU=0.01, draw_flag=False):
     """
@@ -47,8 +50,12 @@ def klemm_eguilez(N=50, M=5, P_MU=0.01, draw_flag=False):
 
     # initialize fully connected initial network of size M
     # add its nodes to active nodes
+    G = nx.empty_graph(n = N)
+    pos = nx.circular_layout(G)
     G = nx.complete_graph(M)
     active_nodes = list(G.nodes)
+
+    # FRAME
 
     # iteratively add remaining N-M nodes with edges to M existing nodes
     for i in range(M, N):
@@ -57,11 +64,20 @@ def klemm_eguilez(N=50, M=5, P_MU=0.01, draw_flag=False):
         # add node
         G.add_node(i)
 
+        # FRAME
+        node_colors = ['r' if n in active_nodes else 'k' for n in G.nodes]
+        node_colors[-1] = 'b'
+        frameData.append((G.copy(), pos, node_colors, 'k', 50, False))
+
         for j in active_nodes:
             chance = random.random()        
             if P_MU > chance or len(deactivated_nodes) == 0:
                 # create a reciprocal edge between nodes i and j
                 G.add_edge(i, j)
+                node_colors = ['r' if n in active_nodes else 'k' for n in G.nodes]
+                node_colors[-1] = 'b'
+                frameData.append((G.copy(), pos, node_colors, 'k', 50, False))
+
             else:
                 connected = False
                 while (not connected):
@@ -74,6 +90,10 @@ def klemm_eguilez(N=50, M=5, P_MU=0.01, draw_flag=False):
                         # create a reciprocal edge between nodes i and j
                         G.add_edge(i, j)
                         connected = True
+                        node_colors = ['r' if n in active_nodes else 'k' for n in G.nodes]
+                        node_colors[-1] = 'b'
+                        frameData.append((G.copy(), pos, node_colors, 'k', 50, False))
+            # FRAME
                     
         # replace active node with node i
         # active nodes with lower degree are more likely to be replaced
@@ -88,6 +108,11 @@ def klemm_eguilez(N=50, M=5, P_MU=0.01, draw_flag=False):
                 chosen = True
                 active_nodes.remove(j)
                 active_nodes.append(i)
+                # MAKE ALL ACTIVE NODES (INCLUDING NEW NODE) A PARTICULAR COLOR
+                # NEW NODE DIFF COLOR THAN ACTIVE
+                # node_colors = ['r' if n in active_nodes else 'k' for n in G.nodes]
+                # node_colors[-1] = 'b'
+                # frameData.append((G.copy(), pos, node_colors, 'k', 50, False))
 
     if (draw_flag):
         pos = nx.spring_layout(G, seed=3113794652)  # positions for all nodes
@@ -96,3 +121,25 @@ def klemm_eguilez(N=50, M=5, P_MU=0.01, draw_flag=False):
 
     return G
 
+def animate(i):
+        if(i < len(frameData)):
+            plt.clf()
+            g, pos, node_color, edge_color, node_size, with_labels = frameData[i]
+            nx.draw_networkx(G = g, pos = pos, node_color = node_color, edge_color = edge_color, node_size = node_size, with_labels = with_labels)
+            artists = plt.findobj()
+            # print(artists)
+            plt.xlim(-1.1,1.1)
+            plt.ylim(-1.1,1.1)
+            return artists
+        else:
+            return None
+
+def do_animation():
+    fig, ax = plt.subplots()
+    frameData = []
+    klemm_eguilez(N = 20, P_MU=0.5)
+    ani = animation.FuncAnimation(
+        fig, animate, interval=200, blit=False, save_count=500)
+    plt.show()
+
+do_animation()
