@@ -67,7 +67,8 @@ def klemm_eguilez(N=50, M=5, P_MU=0.01, draw_flag=False):
         # FRAME
         node_colors = ['r' if n in active_nodes else 'k' for n in G.nodes]
         node_colors[-1] = 'b'
-        frameData.append((G.copy(), pos, node_colors, 'k', 50, False))
+        edge_colors = ['g' if (e[0] == i or e[1] == i) else 'k' for e in G.edges]
+        frameData.append((G.copy(), pos, node_colors, edge_colors, 50, False))
 
         for j in active_nodes:
             chance = random.random()        
@@ -76,7 +77,8 @@ def klemm_eguilez(N=50, M=5, P_MU=0.01, draw_flag=False):
                 G.add_edge(i, j)
                 node_colors = ['r' if n in active_nodes else 'k' for n in G.nodes]
                 node_colors[-1] = 'b'
-                frameData.append((G.copy(), pos, node_colors, 'k', 50, False))
+                edge_colors = ['g' if (e[0] == i or e[1] == i) else 'k' for e in G.edges]
+                frameData.append((G.copy(), pos, node_colors, edge_colors, 50, False))
 
             else:
                 connected = False
@@ -98,7 +100,8 @@ def klemm_eguilez(N=50, M=5, P_MU=0.01, draw_flag=False):
 
                         node_colors = ['r' if n in active_nodes else 'k' for n in G.nodes]
                         node_colors[-1] = 'b'
-                        frameData.append((G.copy(), pos, node_colors, 'k', 50, False))
+                        edge_colors = ['g' if (e[0] == i or e[1] == i) else 'k' for e in G.edges]
+                        frameData.append((G.copy(), pos, node_colors, edge_colors, 50, False))
             # FRAME
                     
         # replace active node with node i
