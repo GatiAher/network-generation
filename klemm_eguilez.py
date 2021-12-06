@@ -85,11 +85,17 @@ def klemm_eguilez(N=50, M=5, P_MU=0.01, draw_flag=False):
                     # choose a random deactivated node to be j
                     j = random.choice(deactivated_nodes)
                     sum_deg_deactivated_nodes = sum([G.degree[x] for x in deactivated_nodes])
-                    if ((G.degree[j] / sum_deg_deactivated_nodes) > chance):
+                    if (G.has_edge(i, j)):
+                        continue
+                    if (((G.degree[j] / sum_deg_deactivated_nodes) > chance)):
                         # preferential attachment to nodes with higher degrees (scale-free)
                         # create a reciprocal edge between nodes i and j
                         G.add_edge(i, j)
+                        # remove node j from this loop's list of deactivated nodes
+                        # so that this node j will not be picked twice
+                        deactivated_nodes.remove(j)
                         connected = True
+
                         node_colors = ['r' if n in active_nodes else 'k' for n in G.nodes]
                         node_colors[-1] = 'b'
                         frameData.append((G.copy(), pos, node_colors, 'k', 50, False))
