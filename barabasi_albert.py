@@ -54,10 +54,11 @@ def do_animation():
     frameData = []
     generate_ba_graph(n = 20)
     ani = animation.FuncAnimation(
-        fig, animate, interval=200, blit=False, save_count=500)
+        fig, animate, interval=200, blit=False, save_count=70)
     # print(animation.writers.list())
-    writergif = animation.PillowWriter(fps=5) 
+    writergif = animation.PillowWriter(fps=5)
     ani.save("barabasi_albert_animation.gif", writer=writergif)
+    # ani.save("barabasi_albert_animation.html", writer="html")
     plt.show()
 
 do_animation()
