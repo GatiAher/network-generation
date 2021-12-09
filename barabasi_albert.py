@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import networkx as nx
 import numpy as np
+import ffmpeg
 
 frameData = []
 
@@ -51,9 +52,12 @@ def animate(i):
 def do_animation():
     fig, ax = plt.subplots()
     frameData = []
-    generate_ba_graph()
+    generate_ba_graph(n = 20)
     ani = animation.FuncAnimation(
         fig, animate, interval=200, blit=False, save_count=500)
+    # print(animation.writers.list())
+    writergif = animation.PillowWriter(fps=5) 
+    ani.save("barabasi_albert_animation.gif", writer=writergif)
     plt.show()
 
 do_animation()

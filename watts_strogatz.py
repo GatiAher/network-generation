@@ -88,6 +88,9 @@ def do_animation():
     watts_strogatz(N = 20, P = 0.2)
     ani = animation.FuncAnimation(
         fig, animate, interval=400, blit=False, save_count=500)
+
+    writergif = animation.PillowWriter(fps=5) 
+    ani.save("watts_strogatz_animation.gif", writer=writergif)
     plt.show()
 
 do_animation()

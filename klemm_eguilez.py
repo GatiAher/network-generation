@@ -149,6 +149,8 @@ def do_animation():
     klemm_eguilez(N = 20, P_MU=0.5)
     ani = animation.FuncAnimation(
         fig, animate, interval=200, blit=False, save_count=500)
+    writergif = animation.PillowWriter(fps=5) 
+    ani.save("klemm_eguilez_animation.gif", writer=writergif)
     plt.show()
 
 do_animation()
