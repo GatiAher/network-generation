@@ -154,4 +154,4 @@ def do_animation():
     ani.save("klemm_eguilez_animation.html", writer="html")
     plt.show()
 
-do_animation()
+# do_animation()

@@ -94,4 +94,4 @@ def do_animation():
     ani.save("watts_strogatz_animation.html", writer="html")
     plt.show()
 
-do_animation()
+# do_animation()

@@ -61,4 +61,4 @@ def do_animation():
     # ani.save("barabasi_albert_animation.html", writer="html")
     plt.show()
 
-do_animation()
+# do_animation()
